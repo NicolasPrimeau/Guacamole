@@ -49,7 +49,7 @@ class GameClient:
             while not turn_done:
                 self.print_board()
                 try:
-                    coords = input('Enter x, y: ')
+                    coords = input('Enter column, row: ')
                     x_str, y_str = coords.split(',')
                     x, y = int(x_str.lstrip().rstrip()), int(y_str.rstrip().lstrip())
                     result = self.do_move(x, y)
