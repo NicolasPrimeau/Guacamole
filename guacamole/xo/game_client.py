@@ -38,6 +38,7 @@ class GameClient:
                 game_done = winner_id is not None or self.is_tie()
                 while not self.is_current_turn() and not game_done:
                     time.sleep(self._poll_time_s)
+                    winner_id = self.winner_id()
                     game_done = winner_id is not None or self.is_tie()
 
             if game_done:
