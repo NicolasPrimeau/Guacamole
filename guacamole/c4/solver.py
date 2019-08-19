@@ -27,7 +27,7 @@ class GameSolver:
             print('P1 win rate: {}'.format(self._won_counts[0] / self._game_plays))
             print('P2 win rate: {}'.format(self._won_counts[1] / self._game_plays))
             print('Tie rate: {}'.format(((self._game_plays - sum(self._won_counts)) / self._game_plays)))
-            print()
+            print(flush=True)
             self.players[0].save()
             self.players[1].save()
 
