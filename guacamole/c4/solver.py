@@ -19,7 +19,7 @@ class GameSolver:
             self.print_stats()
 
     def print_stats(self):
-        if self._game_plays % 250 == 0:
+        if self._game_plays % 1000 == 0:
             print('P1 win rate: {}'.format(self._won_counts[0] / self._game_plays))
             print('P2 win rate: {}'.format(self._won_counts[1] / self._game_plays))
             print('Tie rate: {}'.format(((self._game_plays - sum(self._won_counts)) / self._game_plays)))
