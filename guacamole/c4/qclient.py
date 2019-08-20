@@ -1,9 +1,9 @@
 import json
 import os
 import random
-from collections import deque, Iterable
+from collections import deque
 from pathlib import Path
-from typing import List
+from typing import List, Iterable
 
 from guacamole.c4.client import GameClient
 from guacamole.c4.game import GameToken, GameStateController
