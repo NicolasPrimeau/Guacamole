@@ -18,11 +18,12 @@ class QClient(GameClient):
         self._action_sequence = deque()
         self.save_path = save_path
 
-    def load(self):
+    def load(self) -> bool:
         if not Path(self.save_path).exists():
-            return
+            return False
         with open(self.save_path, 'rb') as mf:
             self._policy = pickle.load(mf)
+        return True
 
     def save(self):
         os.makedirs(os.path.split(self.save_path)[0], exist_ok=True)
