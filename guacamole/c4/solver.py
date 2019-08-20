@@ -51,7 +51,6 @@ class GameSolver:
             player_idx += 1
             player_idx %= 2
             cur_player = self.players[player_idx]
-            # self._controller.print_board()
 
         if self._controller.game_state() == GameState.TIE:
             self.players[0].tie()

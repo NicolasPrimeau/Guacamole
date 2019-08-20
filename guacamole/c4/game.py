@@ -138,6 +138,10 @@ class GameStateController:
                 longest_streak = 1
             elif tok != GameToken.EMPTY.value:
                 longest_streak += 1
+            elif tok == GameToken.EMPTY.value:
+                last_token = GameToken.EMPTY
+                longest_streak = 0
+                
             if longest_streak == self.sequence:
                 return last_token
         return GameToken.EMPTY
