@@ -21,7 +21,7 @@ class GameToken(Enum):
             GameToken.PLAYER1: 'X',
             GameToken.PLAYER2: 'O',
             GameToken.EMPTY: ' '
-        }
+        }[self]
 
 
 class GameState(Enum):
