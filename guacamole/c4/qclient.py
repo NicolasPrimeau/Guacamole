@@ -3,35 +3,9 @@ import pickle
 import random
 from collections import deque
 from pathlib import Path
-from typing import List, Iterable
 
 from guacamole.c4.client import GameClient
 from guacamole.c4.game import GameToken, GameStateController
-
-
-class TreeDict:
-
-    def __init__(self, root: dict = None):
-        self.root = dict() if not root else root
-
-    def set(self, state: Iterable[int], value: List[float]):
-        node = self._get_node(state)
-        node['vals'] = value
-
-    def get(self, state: Iterable[int]):
-        node = self._get_node(state)
-        return node.get('vals', None)
-
-    def __contains__(self, item):
-        return self.get(item) is not None
-
-    def _get_node(self, state):
-        node = self.root
-        for child_id in state:
-            if child_id not in node:
-                node[child_id] = dict()
-            node = node[child_id]
-        return node
 
 
 class QClient(GameClient):
@@ -96,7 +70,6 @@ class QClient(GameClient):
         self._update_with_reward(0.5)
 
     def _update_with_reward(self, reward: float):
-
         state, action = self._action_sequence.popleft()
 
         values = self._policy.get(state, None)

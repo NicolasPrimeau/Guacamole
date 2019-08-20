@@ -8,29 +8,38 @@ from guacamole.c4.game import GameStateController, GameState
 
 class GameSolver:
 
-    def __init__(self, controller: GameStateController, players: Iterable[GameClient], stop_condition_fx):
+    def __init__(self, controller: GameStateController, players: Iterable[GameClient], stop_condition_fx,
+                 save_every=None, stats_every=None):
         self._controller, self.players, self._stop_condition_fx = controller, list(players), stop_condition_fx
         self._won_counts = [0, 0]
         self._game_plays = 0
+        self._stats_every = stats_every if stats_every else datetime.timedelta(seconds=30)
+        self._save_every = save_every if save_every else datetime.timedelta(minutes=30)
         self._last_print = datetime.datetime.now()
+        self._last_save = datetime.datetime.now()
 
     def solve(self):
         while not self._stop_condition_fx():
             self.play_game()
             self._controller.reset()
-            self.print_stats()
+            if datetime.datetime.now() - self._last_print > self._stats_every:
+                self.print_stats()
+            if datetime.datetime.now() - self._last_save > self._save_every:
+                self.save()
 
     def print_stats(self):
-        if datetime.datetime.now() - self._last_print > datetime.timedelta(seconds=30):
-            self._last_print = datetime.datetime.now()
-            print(self._last_print)
-            print('P1 win rate: {}'.format(self._won_counts[0] / self._game_plays))
-            print('P2 win rate: {}'.format(self._won_counts[1] / self._game_plays))
-            print('Tie rate: {}'.format(((self._game_plays - sum(self._won_counts)) / self._game_plays)))
-            print('Total games: {}'.format(self._game_plays))
-            print(flush=True)
-            self.players[0].save()
-            self.players[1].save()
+        self._last_print = datetime.datetime.now()
+        print(self._last_print)
+        print('P1 win rate: {}'.format(self._won_counts[0] / self._game_plays))
+        print('P2 win rate: {}'.format(self._won_counts[1] / self._game_plays))
+        print('Tie rate: {}'.format(((self._game_plays - sum(self._won_counts)) / self._game_plays)))
+        print('Total games: {}'.format(self._game_plays))
+        print(flush=True)
+
+    def save(self):
+        self._last_save = datetime.datetime.now()
+        self.players[0].save()
+        self.players[1].save()
 
     def play_game(self):
         player_idx = random.randint(0, 1)
