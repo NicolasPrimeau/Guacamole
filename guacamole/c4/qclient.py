@@ -1,5 +1,6 @@
 import json
 import os
+import pickle
 import random
 from collections import deque
 from pathlib import Path
@@ -47,13 +48,14 @@ class QClient(GameClient):
     def load(self):
         if not Path(self.save_path).exists():
             return
-        with open(self.save_path, 'r') as mf:
+        with open(self.save_path, 'rb') as mf:
+            self._policy = TreeDict(pickle.load(mf))
             self._policy = TreeDict(json.load(mf))
 
     def save(self):
         os.makedirs(os.path.split(self.save_path)[0], exist_ok=True)
-        with open(self.save_path, 'w') as mf:
-            json.dump(self._policy.root, fp=mf)
+        with open(self.save_path, 'wb') as mf:
+            pickle.dump(self._policy.root, file=mf)
 
     def provide_action(self) -> int:
         rows = self.controller.encode()
