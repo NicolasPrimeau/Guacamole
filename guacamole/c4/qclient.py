@@ -29,6 +29,7 @@ class QClient(GameClient):
         os.makedirs(os.path.split(self.save_path)[0], exist_ok=True)
         with open(self.save_path, 'wb') as mf:
             pickle.dump(self._policy, file=mf)
+        return True
 
     def provide_action(self) -> int:
         rows = self.controller.encode()

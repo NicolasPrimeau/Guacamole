@@ -39,8 +39,12 @@ class GameSolver:
 
     def save(self):
         self._last_save = datetime.datetime.now()
-        self.players[0].save()
-        self.players[1].save()
+        print(self._last_save)
+        print('Saving')
+        if not self.players[0].save():
+            print('Failed to save p1!')
+        if not self.players[1].save():
+            print('Failed to save p2!')
 
     def play_game(self):
         player_idx = random.randint(0, 1)
