@@ -1,7 +1,12 @@
+import os
 from abc import ABC
 
 from guacamole.c4.game import GameStateController
 from guacamole.xo.game import GameToken
+
+
+def clear_screen():
+    return os.system('cls' if os.name == 'nt' else 'clear')
 
 
 class InputClient(ABC):
@@ -20,7 +25,11 @@ class InputClient(ABC):
         return self.get_input()
 
     def get_input(self):
+        clear_screen()
         while True:
+            print()
+            print('Your token is {}'.format(str(self.token)))
+            print()
             self.controller.print_board()
             try:
                 x = int(input('Provide col: ')) - 1
@@ -44,14 +53,13 @@ class InputClient(ABC):
         self._end_game('Tie!')
 
     def _end_game(self, msg):
-        print('=' * len('|   |   |   |   |   |   |   |   |'))
+        clear_screen()
         print()
         self.controller.print_board(help=False)
         print()
         print(msg)
         print()
         print()
-        print('=' * len('|   |   |   |   |   |   |   |   |'))
         print()
         x = str(input('Play again? ')).lower()
         self.stop = x != 'y'

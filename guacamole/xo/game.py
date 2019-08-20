@@ -21,9 +21,9 @@ class GameToken(Enum):
 
     def __str__(self):
         return {
-            GameToken.X_TOKEN: 'x',
-            GameToken.O_TOKEN: 'o',
-            GameToken.NOTHING: '.'
+            GameToken.X_TOKEN: 'X',
+            GameToken.O_TOKEN: 'O',
+            GameToken.NOTHING: ' '
         }[self]
 
 

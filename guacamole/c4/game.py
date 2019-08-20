@@ -53,11 +53,8 @@ class GameStateController:
     def print_board(self, help=True):
         board = self._board.transpose()
 
-        def map_tok(val):
-            return str(val) if val != 0 else ' '
-
         for col in reversed(range(self.size())):
-            print('| ' + ' | '.join(map_tok(board[col, row]) for row in range(self.size())) + ' |')
+            print('| ' + ' | '.join(str(GameToken.from_val(board[col, row])) for row in range(self.size())) + ' |')
             print('+-' + '-+-'.join('-' for _ in range(self.size())) + '-+')
         if help:
             print('  ' + '   '.join(str(x + 1) for x in range(self.size())) + '  ')
