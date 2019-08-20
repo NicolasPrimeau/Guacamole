@@ -8,6 +8,7 @@ class InputClient(ABC):
 
     def __init__(self, controller: GameStateController, token: GameToken):
         self.controller, self.token = controller, token
+        self.stop = False
 
     def save(self):
         pass
@@ -34,16 +35,23 @@ class InputClient(ABC):
         pass
 
     def lost(self):
-        print()
-        print('You lost.')
-        print()
+        self._end_game('You lost!')
 
     def won(self):
-        print()
-        print('You won.')
-        print()
+        self._end_game('You won!')
 
     def tie(self):
+        self._end_game('Tie!')
+
+    def _end_game(self, msg):
+        print('=' * len('|   |   |   |   |   |   |   |   |'))
         print()
-        print('Tie!')
+        self.controller.print_board(help=False)
         print()
+        print(msg)
+        print()
+        print()
+        print('=' * len('|   |   |   |   |   |   |   |   |'))
+        print()
+        x = str(input('Play again? ')).lower()
+        self.stop = x != 'y'

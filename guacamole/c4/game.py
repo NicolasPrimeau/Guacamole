@@ -48,13 +48,17 @@ class GameStateController:
                 return True
         return False
 
-    def print_board(self):
-        for col in range(self.size()):
-            print('{} : '.format(col), end='')
-            for row in range(self.size()):
-                print(self._board[col, row], end='')
-                print(' ', end='')
-            print()
+    def print_board(self, help=True):
+        board = self._board.transpose()
+
+        def map_tok(val):
+            return str(val) if val != 0 else ' '
+
+        for col in reversed(range(self.size())):
+            print('| ' + ' | '.join(map_tok(board[col, row]) for row in range(self.size())) + ' |')
+            print('+-' + '-+-'.join('-' for _ in range(self.size())) + '-+')
+        if help:
+            print('  ' + '   '.join(str(x) for x in range(self.size())) + '  ')
         print()
 
     def game_state(self) -> GameState:
@@ -141,7 +145,7 @@ class GameStateController:
             elif tok == GameToken.EMPTY.value:
                 last_token = GameToken.EMPTY
                 longest_streak = 0
-                
+
             if longest_streak == self.sequence:
                 return last_token
         return GameToken.EMPTY
