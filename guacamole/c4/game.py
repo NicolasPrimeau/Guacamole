@@ -42,9 +42,8 @@ class GameStateController:
         return tuple(tuple(x) for x in self._board[:])
 
     def drop_token(self, col, token: GameToken):
-        if col <= 0 or col >= self.size():
+        if col < 0 or col >= self.size():
             return False
-        col -= 1
         for idx, i in enumerate(self._board[col]):
             if i == GameToken.EMPTY.value:
                 self._board[col, idx] = token.value

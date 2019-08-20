@@ -23,9 +23,9 @@ class InputClient(ABC):
         while True:
             self.controller.print_board()
             try:
-                x = int(input('Provide col: '))
+                x = int(input('Provide col: ')) - 1
                 print()
-                if 0 <= x <= self.controller.size():
+                if 0 <= x < self.controller.size():
                     return x
             except ValueError as e:
                 pass
