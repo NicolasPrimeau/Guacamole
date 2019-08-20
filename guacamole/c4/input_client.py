@@ -55,6 +55,8 @@ class InputClient(ABC):
     def _end_game(self, msg):
         clear_screen()
         print()
+        print('Your token is {}'.format(str(self.token)))
+        print()
         self.controller.print_board(help=False)
         print()
         print(msg)
