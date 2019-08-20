@@ -33,7 +33,7 @@ class GameState(Enum):
 
 class GameStateController:
 
-    def __init__(self, size=8, sequence=4):
+    def __init__(self, size=7, sequence=4):
         self._size, self.sequence = size, sequence
         self._state = GameState.ACTIVE
         self._board = np.zeros(shape=(self._size, self._size), dtype=np.int8)
