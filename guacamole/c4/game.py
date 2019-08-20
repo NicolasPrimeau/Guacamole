@@ -42,6 +42,9 @@ class GameStateController:
         return tuple(tuple(x) for x in self._board[:])
 
     def drop_token(self, col, token: GameToken):
+        if col <= 0 or col >= self.size():
+            return False
+        col -= 1
         for idx, i in enumerate(self._board[col]):
             if i == GameToken.EMPTY.value:
                 self._board[col, idx] = token.value
@@ -58,7 +61,7 @@ class GameStateController:
             print('| ' + ' | '.join(map_tok(board[col, row]) for row in range(self.size())) + ' |')
             print('+-' + '-+-'.join('-' for _ in range(self.size())) + '-+')
         if help:
-            print('  ' + '   '.join(str(x) for x in range(self.size())) + '  ')
+            print('  ' + '   '.join(str(x + 1) for x in range(self.size())) + '  ')
         print()
 
     def game_state(self) -> GameState:

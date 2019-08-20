@@ -45,6 +45,7 @@ class GameSolver:
             print('Failed to save p1!')
         if not self.players[1].save():
             print('Failed to save p2!')
+        print()
 
     def play_game(self):
         player_idx = random.randint(0, 1)
