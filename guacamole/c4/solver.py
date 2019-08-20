@@ -31,8 +31,8 @@ class GameSolver:
     def print_stats(self):
         self._last_print = datetime.datetime.now()
         print(self._last_print)
-        print('P1 win rate: {}'.format(self._won_counts[0] / self._game_plays))
-        print('P2 win rate: {}'.format(self._won_counts[1] / self._game_plays))
+        print('P1 win rate ({}): {}'.format(str(self.players[0].token), self._won_counts[0] / self._game_plays))
+        print('P2 win rate ({}): {}'.format(str(self.players[1].token), self._won_counts[1] / self._game_plays))
         print('Tie rate: {}'.format(((self._game_plays - sum(self._won_counts)) / self._game_plays)))
         print('Total games: {}'.format(self._game_plays))
         print(flush=True)

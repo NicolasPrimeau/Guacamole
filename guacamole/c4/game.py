@@ -16,6 +16,13 @@ class GameToken(Enum):
                 return item
         return None
 
+    def __str__(self):
+        return {
+            GameToken.PLAYER1: 'X',
+            GameToken.PLAYER2: 'O',
+            GameToken.EMPTY: ' '
+        }
+
 
 class GameState(Enum):
     ACTIVE = 0
