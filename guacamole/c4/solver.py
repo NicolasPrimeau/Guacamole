@@ -9,10 +9,11 @@ from guacamole.c4.game import GameStateController, GameState
 class GameSolver:
 
     def __init__(self, controller: GameStateController, players: Iterable[GameClient], stop_condition_fx,
-                 save_every=None, stats_every=None):
+                 save_every=None, stats_every=None, save=True):
         self._controller, self.players, self._stop_condition_fx = controller, list(players), stop_condition_fx
         self._won_counts = [0, 0]
         self._game_plays = 0
+        self._save = save
         self._stats_every = stats_every if stats_every else datetime.timedelta(seconds=30)
         self._save_every = save_every if save_every else datetime.timedelta(minutes=30)
         self._last_print = datetime.datetime.now()
@@ -24,7 +25,7 @@ class GameSolver:
             self._controller.reset()
             if datetime.datetime.now() - self._last_print > self._stats_every:
                 self.print_stats()
-            if datetime.datetime.now() - self._last_save > self._save_every:
+            if self._save and datetime.datetime.now() - self._last_save > self._save_every:
                 self.save()
 
     def print_stats(self):
