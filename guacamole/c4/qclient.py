@@ -1,4 +1,3 @@
-import json
 import os
 import pickle
 import random
@@ -40,7 +39,7 @@ class QClient(GameClient):
     def __init__(self, controller: GameStateController, token: GameToken, exploration=0.05, learning_rate=0.05,
                  discount_factor=1.00, save_path=None):
         super().__init__(controller, token)
-        self._policy = TreeDict()
+        self._policy = dict()
         self.exploration, self.alpha, self.gamma = exploration, learning_rate, discount_factor
         self._action_sequence = deque()
         self.save_path = save_path
@@ -49,29 +48,30 @@ class QClient(GameClient):
         if not Path(self.save_path).exists():
             return
         with open(self.save_path, 'rb') as mf:
-            self._policy = TreeDict(pickle.load(mf))
-            self._policy = TreeDict(json.load(mf))
+            self._policy = pickle.load(mf)
 
     def save(self):
         os.makedirs(os.path.split(self.save_path)[0], exist_ok=True)
         with open(self.save_path, 'wb') as mf:
-            pickle.dump(self._policy.root, file=mf)
+            pickle.dump(self._policy, file=mf)
 
     def provide_action(self) -> int:
         rows = self.controller.encode()
         state = list()
         for row in rows:
             state.extend(row)
+        state = ''.join(str(x) for x in state)
 
         if random.random() < self.exploration:
             action = random.randint(0, self.controller.size() - 1)
             self._action_sequence.append((state, action))
             return action
 
-        values = self._policy.get(state)
+        values = self._policy.get(state, None)
         if not values:
             values = [random.random() for _ in range(self.controller.size())]
-            self._policy.set(state, values)
+            self._policy[state] = values
+
         action = max(range(self.controller.size()), key=lambda i: values[i])
         self._action_sequence.append((state, action))
         return action
@@ -79,10 +79,10 @@ class QClient(GameClient):
     def bad_move(self):
         state, action = self._action_sequence.popleft()
 
-        values = self._policy.get(state)
+        values = self._policy.get(state, None)
         if not values:
             values = [random.random() for _ in range(self.controller.size())]
-            self._policy.set(state, values)
+            self._policy[state] = values
 
         values[action] = -1
 
@@ -99,20 +99,20 @@ class QClient(GameClient):
 
         state, action = self._action_sequence.popleft()
 
-        values = self._policy.get(state)
+        values = self._policy.get(state, None)
         if not values:
             values = [random.random() for _ in range(self.controller.size())]
-            self._policy.set(state, values)
+            self._policy[state] = values
 
         values[action] += (1 - self.alpha) * values[action] + self.alpha * reward
 
         max_prev = self.gamma * max(values)
         while len(self._action_sequence) > 0:
             state, action = self._action_sequence.popleft()
-            values = self._policy.get(state)
+            values = self._policy.get(state, None)
             if not values:
                 values = [random.random() for _ in range(self.controller.size())]
-                self._policy.set(state, values)
+                self._policy[state] = values
 
             values[action] = (1 - self.alpha) * values[action] + self.alpha * max_prev
             max_prev = self.gamma * max(values)
